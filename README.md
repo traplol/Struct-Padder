@@ -1,5 +1,5 @@
 # Struct-Padder
-A simple struct parser to fix offset/padding
+A simple struct parser to automatically pad based on fixed offsets.
 
 
 example input:
