@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Linq.Expressions;
 using System.Windows.Forms;
 
 namespace StructPadder
 {
     public partial class Form1 : Form
     {
+
+        private string _currentOpenFilePath;
+        private string _currentSaveFilePath;
+
         public Form1()
         {
             InitializeComponent();
@@ -32,12 +38,15 @@ namespace StructPadder
             MemberTypeTable.AddBuiltinType("D3DXMATRIX", 4 * 4 * MemberTypeTable.GetMemberTypeSize("float"));
 
 
-            var s = new Struct("Player");
-            s.AddMember(Member.CreateValue("int32", "Health", 4, 0x10));
-            s.AddMember(Member.CreateValue("int32", "Mana", 5, 0x14));
-            s.AddMember(Member.CreateValue("D3DXVECTOR3", "Position1", 6, 0x150));
-            s.AddMember(Member.CreateValueRelative("D3DXVECTOR3", "Position2", 7));
-            outputTb.Text = s.ToString();
+            const string example =
+@"struct Player {
+    int32 Health : 0x10;
+    int32 Mana : 0x14;
+    D3DXVECTOR3 Position1 : 0x150;
+    D3DXVECTOR3 Position2;
+};
+";
+            inputTb.Text = example;
         }
 
         private void inputTb_TextChanged(object sender, EventArgs e)
@@ -63,6 +72,54 @@ namespace StructPadder
                     outputTb.AppendText(s.ToString());
                     outputTb.AppendText("\r\n");
                 }
+            }
+            catch (Exception ex)
+            {
+                outputTb.Text = ex.Message;
+            }
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                _currentOpenFilePath = openFileDialog.InitialDirectory + openFileDialog.FileName;
+                try
+                {
+                    inputTb.Text = File.ReadAllText(_currentOpenFilePath);
+                }
+                catch (Exception ex)
+                {
+                    outputTb.Text = ex.Message;
+                }
+            }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(_currentSaveFilePath))
+            {
+                saveAsToolStripMenuItem_Click(sender, e);
+                return;
+            }
+
+            SaveOutput(_currentSaveFilePath);
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                _currentSaveFilePath = saveFileDialog.InitialDirectory + saveFileDialog.FileName;
+                SaveOutput(_currentSaveFilePath);
+            }
+        }
+
+        private void SaveOutput(string path)
+        {
+            try
+            {
+                File.WriteAllText(path, outputTb.Text);
             }
             catch (Exception ex)
             {
