@@ -73,13 +73,21 @@ what it does: It defines a member called Pos2 with type Vec3 immediately after t
 # built-in types
 ```char``` size: 1
 
-```int8``` size: 1
+```__int8``` size: 1
 
-```int16``` size: 2
+```int8``` alias to ```__int8```
 
-```int32``` size: 4
+```__int16``` size: 2
 
-```int64``` size: 8
+```int16``` alias to ```__int16```
+
+```__int32``` size: 4
+
+```int32``` alias to ```__int32```
+
+```__int64``` size: 8
+
+```int64``` alias to ```__int64```
 
 ```float``` size: 4
 
