@@ -33,10 +33,10 @@ namespace StructPadder
 
 
             var s = new Struct("Player");
-            s.AddMember(Member.CreateValue("int32", "Health", 0x10));
-            s.AddMember(Member.CreateValue("int32", "Mana", 0x14));
-            s.AddMember(Member.CreateValue("D3DXVECTOR3", "Position1", 0x150));
-            s.AddMember(Member.CreateValueRelative("D3DXVECTOR3", "Position2"));
+            s.AddMember(Member.CreateValue("int32", "Health", 4, 0x10));
+            s.AddMember(Member.CreateValue("int32", "Mana", 5, 0x14));
+            s.AddMember(Member.CreateValue("D3DXVECTOR3", "Position1", 6, 0x150));
+            s.AddMember(Member.CreateValueRelative("D3DXVECTOR3", "Position2", 7));
             outputTb.Text = s.ToString();
         }
 

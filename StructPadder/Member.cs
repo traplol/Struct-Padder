@@ -8,6 +8,7 @@ namespace StructPadder
         public MemberType Type { get; }
         public string Name { get; }
         public int Offset { get; set; }
+        public int LineNum { get; }
         public int NumStars { get; }
         public int NumElements { get; }
         public bool IsRelative { get; }
@@ -15,92 +16,98 @@ namespace StructPadder
 
         public int Size => GetSize();
 
-        private Member(MemberType type, string name, int numStars, int numElements)
+        private Member(MemberType type, string name, int lineNum, int numStars, int numElements)
         {
+            if (numElements <= 0)
+            {
+                throw new ArgumentException("numElements", "numElements cannot be <= 0!");
+            }
             Type = type;
             Name = name;
             Offset = 0;
             IsRelative = true;
+            LineNum = lineNum;
             NumStars = numStars;
             NumElements = numElements;
         }
-        private Member(MemberType type, string name, int offset, int numStars, int numElements)
+        private Member(MemberType type, string name, int lineNum, int offset, int numStars, int numElements)
         {
+            if (numElements <= 0)
+            {
+                throw new ArgumentException("numElements", "numElements cannot be <= 0!");
+            }
+            if (offset < 0)
+            {
+                throw new ArgumentException("offset", "offset cannot be < 0!");
+            }
             Type = type;
             Name = name;
             Offset = offset;
             IsRelative = false;
+            LineNum = lineNum;
             NumStars = numStars;
             NumElements = numElements;
         }
 
-        public static Member CreateArrayRelative(string typeName, string name, int numStars, int numElements)
+        public static Member CreateArrayRelative(string typeName, string name, int lineNum, int numStars, int numElements)
         {
             var type = MemberTypeTable.GetMemberType(typeName);
-            return CreateArrayRelative(type, name, numStars, numElements);
+            return CreateArrayRelative(type, name, lineNum, numStars, numElements);
         }
 
-        public static Member CreateArrayRelative(MemberType type, string name, int numStars, int numElements)
+        public static Member CreateArrayRelative(MemberType type, string name, int lineNum, int numStars, int numElements)
         {
-            if (numElements <= 0)
-            {
-                throw new ArgumentException("numElements", "numElements cannot be <= 0!");
-            }
-            return new Member(type, name, numStars, numElements);
+            return new Member(type, name, lineNum, numStars, numElements);
         }
 
-        public static Member CreateArray(string typeName, string name, int offset, int numStars, int numElements)
+        public static Member CreateArray(string typeName, string name, int lineNum, int offset, int numStars, int numElements)
         {
             var type = MemberTypeTable.GetMemberType(typeName);
-            return CreateArray(type, name, offset, numStars, numElements);
+            return CreateArray(type, name, lineNum, offset, numStars, numElements);
         }
-        public static Member CreateArray(MemberType type, string name, int offset, int numStars, int numElements)
+        public static Member CreateArray(MemberType type, string name, int lineNum, int offset, int numStars, int numElements)
         {
-            if (numElements <= 0)
-            {
-                throw new ArgumentException("numElements", "numElements cannot be <= 0!");
-            }
-            return new Member(type, name, offset, numStars, numElements);
+            return new Member(type, name, lineNum, offset, numStars, numElements);
         }
 
-        public static Member CreatePointerRelative(string typeName, string name, int numStars)
+        public static Member CreatePointerRelative(string typeName, string name, int lineNum, int numStars)
         {
             var type = MemberTypeTable.GetMemberType(typeName);
-            return CreatePointerRelative(type, name, numStars);
+            return CreatePointerRelative(type, name, lineNum, numStars);
         }
-        public static Member CreatePointerRelative(MemberType type, string name, int numStars)
+        public static Member CreatePointerRelative(MemberType type, string name, int lineNum, int numStars)
         {
-            return new Member(type, name, numStars, 1);
+            return new Member(type, name, lineNum, numStars, 1);
         }
 
-        public static Member CreatePointer(string typeName, string name, int offset, int numStars)
+        public static Member CreatePointer(string typeName, string name, int lineNum, int offset, int numStars)
         {
             var type = MemberTypeTable.GetMemberType(typeName);
-            return CreatePointer(type, name, offset, numStars);
+            return CreatePointer(type, name, lineNum, offset, numStars);
         }
-        public static Member CreatePointer(MemberType type, string name, int offset, int numStars)
+        public static Member CreatePointer(MemberType type, string name, int lineNum, int offset, int numStars)
         {
-            return new Member(type, name, offset, numStars, 1);
+            return new Member(type, name, lineNum, offset, numStars, 1);
         }
 
-        public static Member CreateValueRelative(string typeName, string name)
+        public static Member CreateValueRelative(string typeName, string name, int lineNum)
         {
             var type = MemberTypeTable.GetMemberType(typeName);
-            return CreateValueRelative(type, name);
+            return CreateValueRelative(type, name, lineNum);
         }
-        public static Member CreateValueRelative(MemberType type, string name)
+        public static Member CreateValueRelative(MemberType type, string name, int lineNum)
         {
-            return new Member(type, name, 0, 1);
+            return new Member(type, name, lineNum, 0, 1);
         }
 
-        public static Member CreateValue(string typeName, string name, int offset)
+        public static Member CreateValue(string typeName, string name, int lineNum, int offset)
         {
             var type = MemberTypeTable.GetMemberType(typeName);
-            return CreateValue(type, name, offset);
+            return CreateValue(type, name, lineNum, offset);
         }
-        public static Member CreateValue(MemberType type, string name, int offset)
+        public static Member CreateValue(MemberType type, string name, int lineNum, int offset)
         {
-            return new Member(type, name, offset, 0, 1);
+            return new Member(type, name, lineNum, offset, 0, 1);
         }
 
         private int GetSize()

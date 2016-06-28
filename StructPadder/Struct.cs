@@ -32,13 +32,17 @@ namespace StructPadder
             int offset = 0;
             foreach (var m in _realMembers)
             {
+                if (m.Type == null)
+                {
+                    throw new Exception(string.Format("type not defined at line:{0}!", m.LineNum));
+                }
                 if (m.IsRelative)
                 {
                     m.Offset = offset;
                 }
                 if (m.Offset - offset < 0)
                 {
-                    throw new Exception("Struct alignment wrong.");
+                    throw new Exception(string.Format("Struct alignment wrong at line:{0}!", m.LineNum));
                 }
                 if (m.Offset - offset  > 0)
                 {
@@ -46,6 +50,7 @@ namespace StructPadder
                     paddedList.Add(Member.CreateArray(
                         "char",
                         string.Format("_pad_0x{0:X4}", offset),
+                        -1,
                         offset,
                         0,
                         size));

@@ -36,22 +36,29 @@ namespace StructPadder
 
         private static Token Expect(Token.TokenTypes type, List<Token> tokens, ref int idx)
         {
+            if (idx >= tokens.Count && idx > 0)
+            {
+                throw new ArgumentException(string.Format("Expected token {0} at line:{1}", type, tokens[idx-1].Line));
+            }
             var tk = tokens[idx];
             if (tk.Type == type)
             {
                 idx++;
                 return tk;
             }
-            throw new ArgumentException(string.Format("Unexpected token: '{0}' at line:{1}", tk.Type, tk.Line));
+            throw new ArgumentException(string.Format("Unexpected token: '{0}' at line:{1}, expected {2}", tk.StringValue, tk.Line, type));
         }
 
         private static Token Accept(Token.TokenTypes type, List<Token> tokens, ref int idx)
         {
-            var tk = tokens[idx];
-            if (tk.Type == type)
+            if (idx < tokens.Count)
             {
-                idx++;
-                return tk;
+                var tk = tokens[idx];
+                if (tk.Type == type)
+                {
+                    idx++;
+                    return tk;
+                }
             }
             return null;
         }
@@ -68,7 +75,7 @@ namespace StructPadder
                 case Token.TokenTypes.KDefSize:
                     return ParseDefSize(tokens, ref idx);
             }
-            throw new ArgumentException(string.Format("Unexpected token: '{0}' at line:{1}", tk.Type, tk.Line));
+            throw new ArgumentException(string.Format("Unexpected token: '{0}' at line:{1}", tk.StringValue, tk.Line));
         }
 
         private static Struct ParseStruct(List<Token> tokens, ref int idx)
@@ -111,12 +118,12 @@ namespace StructPadder
                     {
                         var offset = Expect(Token.TokenTypes.IntNum, tokens, ref idx);
                         Expect(Token.TokenTypes.Semicolon, tokens, ref idx);
-                        return Member.CreateArray(type.StringValue, ident.StringValue, (int)offset.Value, numStars, (int)numElems.Value);
+                        return Member.CreateArray(type.StringValue, ident.StringValue, type.Line, (int)offset.Value, numStars, (int)numElems.Value);
                     }
 
                     Expect(Token.TokenTypes.Semicolon, tokens, ref idx);
 
-                    return Member.CreateArrayRelative(type.StringValue, ident.StringValue, numStars, (int)numElems.Value);
+                    return Member.CreateArrayRelative(type.StringValue, ident.StringValue, type.Line, numStars, (int)numElems.Value);
                 }
                 else
                 {
@@ -126,16 +133,16 @@ namespace StructPadder
                         Expect(Token.TokenTypes.Semicolon, tokens, ref idx);
                         if (numStars > 0)
                         {
-                            return Member.CreatePointer(type.StringValue, ident.StringValue, (int)offset.Value, numStars);
+                            return Member.CreatePointer(type.StringValue, ident.StringValue, type.Line, (int)offset.Value, numStars);
                         }
-                        return Member.CreateValue(type.StringValue, ident.StringValue, (int)offset.Value);
+                        return Member.CreateValue(type.StringValue, ident.StringValue, type.Line, (int)offset.Value);
                     }
                     Expect(Token.TokenTypes.Semicolon, tokens, ref idx);
                     if (numStars > 0)
                     {
-                        return Member.CreatePointerRelative(type.StringValue, ident.StringValue, numStars);
+                        return Member.CreatePointerRelative(type.StringValue, ident.StringValue, type.Line, numStars);
                     }
-                    return Member.CreateValueRelative(type.StringValue, ident.StringValue);
+                    return Member.CreateValueRelative(type.StringValue, ident.StringValue, type.Line);
                 }
             }
             return null;
@@ -153,14 +160,14 @@ namespace StructPadder
 
         private static Struct ParseDefSize(List<Token> tokens, ref int idx)
         {
-            Expect(Token.TokenTypes.KDefSize, tokens, ref idx);
+            var defsize = Expect(Token.TokenTypes.KDefSize, tokens, ref idx);
             var ident = Expect(Token.TokenTypes.Ident, tokens, ref idx);
             Expect(Token.TokenTypes.Equals, tokens, ref idx);
             var size = Expect(Token.TokenTypes.IntNum, tokens, ref idx);
             Expect(Token.TokenTypes.Semicolon, tokens, ref idx);
 
             var s = new Struct(ident.StringValue);
-            s.AddMember(Member.CreateArray("char", "unk", 0, 0, (int)size.Value));
+            s.AddMember(Member.CreateArray("char", "unk", defsize.Line, 0, 0, (int)size.Value));
             return s;
         }
     }
