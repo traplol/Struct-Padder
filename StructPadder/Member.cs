@@ -49,7 +49,6 @@ namespace StructPadder
             return new Member(type, name, numStars, numElements);
         }
 
-
         public static Member CreateArray(string typeName, string name, int offset, int numStars, int numElements)
         {
             var type = MemberTypeTable.GetMemberType(typeName);
@@ -63,7 +62,6 @@ namespace StructPadder
             }
             return new Member(type, name, offset, numStars, numElements);
         }
-
 
         public static Member CreatePointerRelative(string typeName, string name, int numStars)
         {
@@ -84,9 +82,6 @@ namespace StructPadder
         {
             return new Member(type, name, offset, numStars, 1);
         }
-
-
-
 
         public static Member CreateValueRelative(string typeName, string name)
         {

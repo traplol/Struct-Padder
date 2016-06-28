@@ -24,6 +24,7 @@ namespace StructPadder
             KSigned,
             KUnsigned,
             KPtrSize,
+            KDefSize,
             KStructOrClass,
         }
 
@@ -62,6 +63,7 @@ namespace StructPadder
             new TokenDefinition(TokenTypes.KSigned, new Regex(@"signed")), 
             new TokenDefinition(TokenTypes.KUnsigned, new Regex(@"unsigned")), 
             new TokenDefinition(TokenTypes.KPtrSize, new Regex(@"ptrsize")), 
+            new TokenDefinition(TokenTypes.KDefSize, new Regex(@"defsize")), 
             new TokenDefinition(TokenTypes.KStructOrClass, new Regex(@"struct|class")), 
 
             new TokenDefinition(TokenTypes.Ident, new Regex(@"[a-zA-Z_]+[a-zA-Z0-9_]*")),

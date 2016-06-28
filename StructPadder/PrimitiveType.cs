@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace StructPadder
 {
-    class BuiltinMemberType : MemberType
+    class PrimitiveType : MemberType
     {
         public override sealed int Size { get; set; }
 
-        public BuiltinMemberType(string name, int size)
+        public PrimitiveType(string name, int size)
             :base(name)
         {
             Size = size;

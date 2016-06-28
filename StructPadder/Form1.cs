@@ -56,6 +56,7 @@ namespace StructPadder
 
             try
             {
+                MemberTypeTable.ClearUserTypes();
                 var structs = Generator.Generate(tokens);
                 foreach (var s in structs)
                 {

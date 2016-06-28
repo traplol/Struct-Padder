@@ -65,6 +65,8 @@ namespace StructPadder
                     return ParseStruct(tokens, ref idx);
                 case Token.TokenTypes.KPtrSize:
                     return ParsePtrSize(tokens, ref idx);
+                case Token.TokenTypes.KDefSize:
+                    return ParseDefSize(tokens, ref idx);
             }
             throw new ArgumentException(string.Format("Unexpected token: '{0}' at line:{1}", tk.Type, tk.Line));
         }
@@ -143,9 +145,20 @@ namespace StructPadder
         {
             Expect(Token.TokenTypes.KPtrSize, tokens, ref idx);
             Expect(Token.TokenTypes.Equals, tokens, ref idx);
-            var tk = Expect(Token.TokenTypes.IntNum, tokens, ref idx);
-            PointerSize = (int)tk.Value;
+            var size = Expect(Token.TokenTypes.IntNum, tokens, ref idx);
             Expect(Token.TokenTypes.Semicolon, tokens, ref idx);
+            PointerSize = (int)size.Value;
+            return null;
+        }
+
+        private static Struct ParseDefSize(List<Token> tokens, ref int idx)
+        {
+            Expect(Token.TokenTypes.KDefSize, tokens, ref idx);
+            var ident = Expect(Token.TokenTypes.Ident, tokens, ref idx);
+            Expect(Token.TokenTypes.Equals, tokens, ref idx);
+            var size = Expect(Token.TokenTypes.IntNum, tokens, ref idx);
+            Expect(Token.TokenTypes.Semicolon, tokens, ref idx);
+            MemberTypeTable.AddUserType(ident.StringValue, (int)size.Value);
             return null;
         }
     }
