@@ -71,34 +71,23 @@ example: ```Vec3 Pos2;```
 what it does: It defines a member called Pos2 with type Vec3 immediately after the previous member.
 
 # built-in types
-```char``` size: 1
 
-```__int8``` size: 1
-
-```int8``` alias to ```__int8```
-
-```__int16``` size: 2
-
-```int16``` alias to ```__int16```
-
-```__int32``` size: 4
-
-```int32``` alias to ```__int32```
-
-```__int64``` size: 8
-
-```int64``` alias to ```__int64```
-
-```float``` size: 4
-
-```double``` size: 8
-
-```D3DXVECTOR2``` size: 2 * size of float
-
-```D3DXVECTOR3``` size: 3 * size of float
-
-```D3DXMATRIX``` size: 4 * 4 * size of float
-
+Name | Size
+--- | ---
+```char``` | 1
+```__int8``` | 1
+```__int16``` | 2
+```__int32``` | 4
+```__int64``` | 8
+```float``` | 4
+```double``` | 8
+```D3DXVECTOR2``` | 2 * size of float
+```D3DXVECTOR3``` | 3 * size of float
+```D3DXMATRIX``` | 4 * 4 * size of float
+```int8``` | alias to ```__int8```
+```int16``` | alias to ```__int16```
+```int32``` | alias to ```__int32```
+```int64``` | alias to ```__int64```
 
 
 
