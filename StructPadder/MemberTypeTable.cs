@@ -23,6 +23,18 @@ namespace StructPadder
             }
         }
 
+        public static void AliasBuiltinType(string alias, string name)
+        {
+            if (BuiltinTypes.ContainsKey(name))
+            {
+                BuiltinTypes[alias] = BuiltinTypes[name];
+            }
+            else
+            {
+                throw new ArgumentException(string.Format("Could not alias '{0}' to '{1}' because '{1}' does not exist!", alias, name));
+            }
+        }
+
         public static void ClearUserTypes()
         {
             UserTypes.Clear();

@@ -25,10 +25,10 @@ namespace StructPadder
             outputTb.Font = new Font(FontFamily.GenericMonospace, 12);
 
             MemberTypeTable.AddBuiltinType("char", 1);
-            MemberTypeTable.AddBuiltinType("int8", 1);
-            MemberTypeTable.AddBuiltinType("int16", 2);
-            MemberTypeTable.AddBuiltinType("int32", 4);
-            MemberTypeTable.AddBuiltinType("int64", 8);
+            MemberTypeTable.AddBuiltinType("__int8", 1);
+            MemberTypeTable.AddBuiltinType("__int16", 2);
+            MemberTypeTable.AddBuiltinType("__int32", 4);
+            MemberTypeTable.AddBuiltinType("__int64", 8);
 
             MemberTypeTable.AddBuiltinType("float", 4);
             MemberTypeTable.AddBuiltinType("double", 8);
@@ -36,6 +36,11 @@ namespace StructPadder
             MemberTypeTable.AddBuiltinType("D3DXVECTOR2", 2 * MemberTypeTable.GetMemberTypeSize("float"));
             MemberTypeTable.AddBuiltinType("D3DXVECTOR3", 3 * MemberTypeTable.GetMemberTypeSize("float"));
             MemberTypeTable.AddBuiltinType("D3DXMATRIX", 4 * 4 * MemberTypeTable.GetMemberTypeSize("float"));
+
+            MemberTypeTable.AliasBuiltinType("int8", "__int8");
+            MemberTypeTable.AliasBuiltinType("int16", "__int16");
+            MemberTypeTable.AliasBuiltinType("int32", "__int32");
+            MemberTypeTable.AliasBuiltinType("int64", "__int64");
 
 
             const string example =
