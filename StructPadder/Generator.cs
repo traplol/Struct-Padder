@@ -158,8 +158,10 @@ namespace StructPadder
             Expect(Token.TokenTypes.Equals, tokens, ref idx);
             var size = Expect(Token.TokenTypes.IntNum, tokens, ref idx);
             Expect(Token.TokenTypes.Semicolon, tokens, ref idx);
-            MemberTypeTable.AddUserType(ident.StringValue, (int)size.Value);
-            return null;
+
+            var s = new Struct(ident.StringValue);
+            s.AddMember(Member.CreateArray("char", "unk", 0, 0, (int)size.Value));
+            return s;
         }
     }
 }
