@@ -1,9 +1,10 @@
 # Struct-Padder
-A simple struct parser to automatically pad based on fixed offsets.
+A simple parser used to generate C structs. It parses a structure represented by a similar syntax to the generated C struct.
 
 
-example input:
+# example
 
+input:
 ```
 ptrsize=4;
 
@@ -45,3 +46,55 @@ struct Player {
 	char *Name; 	// offs: 0x88
 }; // size: 0x8C
 ```
+
+# directives
+## ```ptrsize```
+usage: ```ptrsize = 4;```
+
+what it does: It sets the size in bytes of pointers used for calculating offset.
+
+
+## ```defsize```
+usage: ```defsize UnkType = 0x44;```
+
+what it does: It defines a struct stub of the specified size which may be used in structs below.
+
+
+# member syntax
+example: ```Vec3 Pos1 : 0x24;```
+
+what it does: It defines a member called Pos1 with type Vec3 at absolute offset 0x24 within the struct.
+
+
+example: ```Vec3 Pos2;```
+
+what it does: It defines a member called Pos2 with type Vec3 immediately after the previous member.
+
+# built-in types
+```char``` size: 1
+
+```int8``` size: 1
+
+```int16``` size: 2
+
+```int32``` size: 4
+
+```int64``` size: 8
+
+```float``` size: 4
+
+```double``` size: 8
+
+```D3DXVECTOR2``` size: 2 * size of float
+
+```D3DXVECTOR3``` size: 3 * size of float
+
+```D3DXMATRIX``` size: 4 * 4 * size of float
+
+
+
+
+
+
+
+
