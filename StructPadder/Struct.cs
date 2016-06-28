@@ -26,7 +26,7 @@ namespace StructPadder
 
         private List<Member> GetPaddedMembersList()
         {
-            //_realMembers.Sort((m1, m2) => m1.Offset.CompareTo(m2.Offset));
+            _realMembers.Sort((m1, m2) => m1.Offset.CompareTo(m2.Offset));
             var paddedList = new List<Member>();
 
             int offset = 0;
@@ -35,10 +35,6 @@ namespace StructPadder
                 if (m.Type == null)
                 {
                     throw new Exception(string.Format("type not defined at line:{0}!", m.LineNum));
-                }
-                if (m.IsRelative)
-                {
-                    m.Offset = offset;
                 }
                 if (m.Offset - offset < 0)
                 {

@@ -86,10 +86,15 @@ namespace StructPadder
 
             var s = new Struct(ident.StringValue);
 
-            Member m;
+            Member m, last = null;
             while ((m = ParseMember(tokens, ref idx)) != null)
             {
                 s.AddMember(m);
+                if (m.IsRelative && last != null)
+                {
+                    m.Offset = last.Offset + last.Size;
+                }
+                last = m;
             }
 
             Expect(Token.TokenTypes.RCurly, tokens, ref idx);

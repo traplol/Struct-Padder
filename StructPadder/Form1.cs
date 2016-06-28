@@ -42,6 +42,10 @@ namespace StructPadder
             MemberTypeTable.AliasBuiltinType("int32", "__int32");
             MemberTypeTable.AliasBuiltinType("int64", "__int64");
 
+            MemberTypeTable.AliasBuiltinType("BYTE", "__int8");
+            MemberTypeTable.AliasBuiltinType("WORD", "__int16");
+            MemberTypeTable.AliasBuiltinType("DWORD", "__int32");
+            MemberTypeTable.AliasBuiltinType("QWORD", "__int64");
 
             const string example =
 @"struct Player {
